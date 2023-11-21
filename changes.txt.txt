@@ -1,0 +1,15 @@
+2023-11-07
+Created the git repository and configured the basic setup for the STM32 Board. 
+
+2023-11-14
+Connected the LED to the button on the nuclear board using HAL_GPIO_PIN function.  
+
+2023-11-15
+Implemented the moving average function and the buzzer function.
+
+2023-11-17
+Reimplemented the buzzer function by removing the use of timer and used GPIO_PIN instead.
+
+2023-11-20
+Implemented the real time clock and the conditions to check if the waterlevel is stable or not.
+
