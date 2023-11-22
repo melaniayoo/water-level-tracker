@@ -129,6 +129,46 @@ float calculate(const float previous_weight, const float current_weight){
 	}
 }
 
+int get_time_in_seconds(void){
+	 RTC_DateTypeDef gDate;
+	 RTC_TimeTypeDef gTime;
+	/* Get the RTC current Time */
+	 HAL_RTC_GetTime(&hrtc, &gTime, RTC_FORMAT_BIN);
+	/* Get the RTC current Date */
+	 HAL_RTC_GetDate(&hrtc, &gDate, RTC_FORMAT_BIN);
+	 int seconds = gTime.Hours * 3600 + gTime.Minutes * 60 + gTime.Seconds;
+	 return seconds;
+}
+
+float moving_average(float arr[]) {
+	int size = 5;
+	int window_size = 3;
+	int i = 0;
+	float moving_averages[3];
+	while (i < size - window_size + 1) {
+		int window[3];
+		int j;
+
+		for (j = 0; j < window_size; j++) {
+			window[j] = arr[i + j];
+		}
+
+		float window_average = 0;
+
+		for (j = 0; j < window_size; j++) {
+			window_average += window[j];
+		}
+		window_average /= window_size;
+		moving_averages[i] = window_average;
+		i++;
+    }
+	float sum = 0;
+	for(i = 0; i < 3; i++)
+        sum += moving_averages[i];
+	float moving_average = sum/3;
+	return moving_average;
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -175,7 +215,10 @@ int main(void)
   float waterConsumed = 0;
   const int MALE_GOAL = 1000;
   const int FEMALE_GOAL = 800;
+  int previous_time = get_time_in_seconds();
+  int current_time = 0;
   int FIRST = 1;
+  int water_level_changed = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -201,10 +244,24 @@ int main(void)
 	  	previous_weight = measure_weight(loadcell);
 	  	FIRST = 0;
 	  }
-	  weight = measure_weight(loadcell);
+
+	  float arr[5];
+	  for(int i = 0; i < 5; i++) {
+		  arr[i] = measure_weight(loadcell);
+	  }
+	  weight = moving_average(arr);
+
 	  printf("%f",weight);
 	  waterConsumed += calculate(previous_weight, weight);
 	  previous_weight = weight;
+
+	  // ignore change in water level if less than 5
+	  if(waterConsumed < 5){
+		  waterConsumed = 0;
+		  water_level_changed = 0;
+	  }else {
+		  water_level_changed = 1;
+	  }
 
 	  if(maleMode == 1){
 	  	if(waterConsumed >= MALE_GOAL){
@@ -215,6 +272,14 @@ int main(void)
 		if(waterConsumed >= FEMALE_GOAL) {
 			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, 1);
 		}
+	  }
+
+	  current_time = get_time_in_seconds();
+	  if(current_time - previous_time > 10){
+		  previous_time = current_time;
+		  if(water_level_changed == 0){
+			  buzzer();
+		  }
 	  }
  }
   /* USER CODE END 3 */
@@ -237,10 +302,10 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSE;
+  RCC_OscInitStruct.LSEState = RCC_LSE_ON;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
   RCC_OscInitStruct.PLL.PLLM = 16;
@@ -316,9 +381,9 @@ static void MX_RTC_Init(void)
   {
     Error_Handler();
   }
-  sDate.WeekDay = RTC_WEEKDAY_MONDAY;
-  sDate.Month = RTC_MONTH_JANUARY;
-  sDate.Date = 0x1;
+  sDate.WeekDay = RTC_WEEKDAY_WEDNESDAY;
+  sDate.Month = RTC_MONTH_NOVEMBER;
+  sDate.Date = 0x22;
   sDate.Year = 0x0;
 
   if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BCD) != HAL_OK)
@@ -330,7 +395,7 @@ static void MX_RTC_Init(void)
   */
   sAlarm.AlarmTime.Hours = 0x0;
   sAlarm.AlarmTime.Minutes = 0x0;
-  sAlarm.AlarmTime.Seconds = 0x1;
+  sAlarm.AlarmTime.Seconds = 0x0;
   sAlarm.AlarmTime.SubSeconds = 0x0;
   sAlarm.AlarmTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   sAlarm.AlarmTime.StoreOperation = RTC_STOREOPERATION_RESET;
@@ -489,17 +554,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void HAL_RTC_AlarmAEventCallback(RTC_HandleTypeDef *hrtc) {
-  RTC_AlarmTypeDef sAlarm;
-  HAL_RTC_GetAlarm(hrtc,&sAlarm,RTC_ALARM_A,FORMAT_BIN);
-  if(sAlarm.AlarmTime.Seconds>58) {
-    sAlarm.AlarmTime.Seconds=0;
-  }else{
-    sAlarm.AlarmTime.Seconds=sAlarm.AlarmTime.Seconds+1;
-  }
-    while(HAL_RTC_SetAlarm_IT(hrtc, &sAlarm, FORMAT_BIN)!=HAL_OK){}
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-}
+
 /* USER CODE END 4 */
 
 /**
