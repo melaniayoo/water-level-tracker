@@ -252,16 +252,18 @@ int main(void)
 	  weight = moving_average(arr);
 
 	  printf("%f",weight);
-	  waterConsumed += calculate(previous_weight, weight);
-	  previous_weight = weight;
-
+	  int calc = calculate(previous_weight, weight);
 	  // ignore change in water level if less than 5
-	  if(waterConsumed < 5){
-		  waterConsumed = 0;
+	  if(calc < 5){
+		  calc = 0;
 		  water_level_changed = 0;
 	  }else {
 		  water_level_changed = 1;
+		  current_time = get_time_in_seconds();
+		  previous_time = current_time;
 	  }
+	  waterConsumed += calc;
+	  previous_weight = weight;
 
 	  if(maleMode == 1){
 	  	if(waterConsumed >= MALE_GOAL){
