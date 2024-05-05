@@ -24,8 +24,8 @@ Overall, the project ensures accurate monitoring of water consumption, tailored 
 
 ### Layout of Hardware Components:
 
-![layout1](files/layout.jpeg)
-![laout2](files/layout2.jpeg)
+![layout1](files/layout.jpg)
+![laout2](files/layout2.jpg)
 
 Mechanical drawing:
 ![mechanical_drawing](files/mechanical-drawing.png)
