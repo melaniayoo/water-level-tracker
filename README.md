@@ -21,3 +21,24 @@ Here's what the project does:
 7. **Program Functionality:** The program running on the STM32 board converts pressure readings to water volume, handles user input for different intake recommendations, tracks time for reminder purposes, and activates LEDs when daily intake goals are met.
 
 Overall, the project ensures accurate monitoring of water consumption, tailored to individual needs, while promoting hydration through timely reminders and feedback.
+
+### Layout of Hardware Components:
+
+![layout1](files/layout.jpeg)
+![laout2](files/layout2.jpeg)
+
+Mechanical drawing:
+![mechanical_drawing](files/mechanical-drawing.png)
+
+System architecture drawing:
+![system_architecture_drawing](files/system-architecture-drawing.png)
+
+Electrical Schematic Diagram: 
+![electrical_schematic_diagram](files/electrical-schematic-drawing.png)
+
+## Demonstration of the project:
+
+![demo](files/demo.gif)
+
+## Project Members
+[Melania Yoo](https://github.com/melaniayoo/) &amp; [Allan Su](https://github.com/tudourocky/)
