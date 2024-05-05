@@ -24,21 +24,21 @@ Overall, the project ensures accurate monitoring of water consumption, tailored 
 
 ### Layout of Hardware Components:
 
-![layout1](files/layout.jpg)
-![laout2](files/layout2.jpg)
+![layout1](images/layout.jpg)
+![laout2](images/layout2.jpg)
 
 Mechanical drawing:
-![mechanical_drawing](files/mechanical-drawing.png)
+![mechanical_drawing](images/mechanical-drawing.png)
 
 System architecture drawing:
-![system_architecture_drawing](files/system-architecture-drawing.png)
+![system_architecture_drawing](images/system-architecture-drawing.png)
 
 Electrical Schematic Diagram: 
-![electrical_schematic_diagram](files/electrical-schematic-drawing.png)
+![electrical_schematic_diagram](images/electrical-schematic-drawing.png)
 
 ## Demonstration of the project:
 
-![demo](files/demo.gif)
+![demo](images/demo.gif)
 
 ## Project Members
 [Melania Yoo](https://github.com/melaniayoo/) &amp; [Allan Su](https://github.com/tudourocky/)
