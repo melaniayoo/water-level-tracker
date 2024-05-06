@@ -16,7 +16,7 @@ Here's what the project does:
 
 5. **Portability:** The system is designed to be portable, with considerations for size, weight, and power requirements. It effectively seals itself to prevent water leakage during transportation.
 
-6. **Technical Implementation:** It utilizes an STM32F401RE board connected to a pressure sensor and other components. The load cell sensor accurately tracks the weight within the bottle. User feedback is provided through LED lights and a buzzer, with a button for interaction.
+6. **Technical Implementation:** It utilizes an STM32F401RE board connected to a weight sensor and other components. The load cell sensor accurately tracks the weight within the bottle. User feedback is provided through LED lights and a buzzer, with a button for interaction.
 
 7. **Program Functionality:** The program running on the STM32 board reads the weight of the water in the bottle using a load cell sensor, handles user input for different intake recommendations, tracks time for reminder purposes, and activates LEDs when daily intake goals are met.
 
